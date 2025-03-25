@@ -1,5 +1,20 @@
+let documentBody = document.querySelector("body");
+let rockPaperScisscorsButtons = document.querySelectorAll("li button")
+let displayDiv = document.createElement("div");
+let resultDisplay = document.querySelector(".display-result");
+displayDiv.setAttribute("style", "background: #FAF1E6; display: flex; flex: 1; padding: 30px; justify-content: center; font-size: 40px;");
+
 let humanScore = 0;
 let computerScore = 0;
+
+
+let refreshbutton = document.createElement("button");
+refreshbutton.textContent = "Play Again?";
+refreshbutton.setAttribute("style", "width: 100px; height: 50px; padding: 10px; background: #F38C79; margin-top: 50px;");
+refreshbutton.addEventListener("click", () =>{
+   window.location.reload();
+   console.log("clicked");
+})
 
 
 function getComputerChoice(){
@@ -48,61 +63,79 @@ function getHumanChoice(){
 function playRound(human, computer){
     //Based on the rock paper scissors game
     //Compares the user inputs to that of the computer and returns the winner
-
+    human = human.toLowerCase()
     if(human == computer){
-        console.log(` You = ${human} Computer = ${computer} DRAW no winner`)
+        displayDiv.textContent = `You: ${human} Vs. Computer: ${computer}\n    Score: DRAW`;
     }
     else if(human == "rock" && computer == "paper"){
-        console.log(`${computer} beats ${human}. Computer WINS`)
-        computerScore++
+        computerScore++;
+        displayDiv.textContent = `${computer} beats ${human}. Computer WINS.  Current score. You: ${humanScore} Vs Computer: ${computerScore}`;
+        
     }
     else if(human == "paper" && computer == "scissors"){
         console.log(`${computer} beats ${human}. Computer  WIN`)
-        computerScore++
+        computerScore++;
+        displayDiv.textContent = `${computer} beats ${human}. Computer  WIN. Current score. You: ${humanScore} Vs Computer: ${computerScore}`;
+        
     }
     else if(human == "scissors" && computer == "rock"){
-        console.log(`${computer} beats ${computer}. Computer WINS`)
-        computerScore++
+        computerScore++;
+        displayDiv.textContent = `${computer} beats ${computer}. Computer WINS.  Current score. You: ${humanScore} Vs Computer: ${computerScore}`;
+        
     }
     else if(human == "rock" && computer == "scissors"){
-        console.log(`${human} beats ${computer}. Computer WINS`)
-        humanScore++
+        humanScore++;
+        displayDiv.textContent = `${human} beats ${computer}. You WIN  Current score. You: ${humanScore} Vs Computer: ${computerScore} `;
+        
 
     }
     else if(human == "paper" && computer == "rock"){
-        console.log(`${human} beats ${computer}. You WIN`)
-        humanScore++
+        humanScore++;
+        displayDiv.textContent = `${human} beats ${computer}. You WIN.  Current score. You: ${humanScore} Vs Computer: ${computerScore}`;
+        
     }
     else if(human == "scissors" && computer == "paper"){
-        console.log(`${human} beats ${computer}. Computer WINS`)
-        humanScore++
+        humanScore++;
+        displayDiv.textContent = `${human} beats ${computer}. You WIN. Current score. You: ${humanScore} Vs Computer: ${computerScore}`;
     }
     else{
-        console.log("Invalid input recived, check your input and try again")
+        console.log("Invalid input recived, check your input and try again");
     }
         
     
 
 }
 
-function playGame(){
-    let rounds = parseInt(prompt("How many rounds do you want to play: ")) 
-    for(let i = 1; i <= rounds; i++){
-        let urs = getHumanChoice()
-        let computer = getComputerChoice()
-        console.log(`ROUND: ${i}`)
-        playRound(urs, computer)
-        
-        console.log(`Current Score\nComputer =  ${computerScore}\nYou = ${humanScore}`)
-       
-    }
-    
-    if (computerScore > humanScore)    
-        console.log(`Computer WINS with a total score of: ${computerScore} vs Your score of: ${humanScore}`)
-    else if(computerScore < humanScore)
-        console.log(`YOU WIN with a total score of: ${humanScore} vs Computer score of: ${computerScore}`)
-    else
-        console.log("Final score: DRAW no winner")
-}
 
-playGame()
+
+
+rockPaperScisscorsButtons.forEach((butt) =>{
+    butt.addEventListener("click", () =>{
+        if(humanScore === 5 || computerScore === 5){
+            butt.disabled = true;
+            //disableButtons(buttons);
+            butt.setAttribute("style", "background: grey; color: grey;");
+            resultDisplay.appendChild(refreshbutton);
+            if(computerScore > humanScore)
+                displayDiv.textContent = `Final score Computer: ${computerScore} Vs You: ${humanScore} Computer WINS`;
+            else if(humanScore > computerScore){
+                displayDiv.textContent = `Final score Computer: ${computerScore} Vs You: ${humanScore} You WIN`;
+                displayDiv.setAttribute("style", "background: green; color: white; padding: 20px; font-size: 28px;")
+            }
+            else{
+                displayDiv.textContent("Final Score: DRAW");
+            }
+        }
+        else{
+            playRound(butt.textContent, getComputerChoice())
+            resultDisplay.appendChild(displayDiv);
+            resultDisplay.firstElementChild.textContent = "";
+
+        }
+        
+    
+    })
+})
+
+
+
